@@ -33,9 +33,11 @@ class FeedWidgetItem(QWidget):
 
         self.titleLabel.setText(title)
         if link:
-            self.linkLabel.setText(link)
+            _, host, _ = re.match("^([a-z]+:)?//([^\/]+)/(.*)", link).groups()
+            self.linkLabel.setText(host)
         else:
             self.linkLabel.setHidden(True)
+        
         if count:
             self.countLabel.setText(count)
         else:

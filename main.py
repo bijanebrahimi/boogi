@@ -27,7 +27,7 @@ def dict_factory(cursor, row):
     return d
     
 def update_feed(feed, *args):
-    con = sqlite3.connect('db', detect_types=sqlite3.PARSE_DECLTYPES)
+    con = sqlite3.connect(db_path, detect_types=sqlite3.PARSE_DECLTYPES)
     con.row_factory = dict_factory
     
     threads_queue.put('retrieving %s' % feed['link'])
@@ -89,7 +89,7 @@ class BoogiWindow(MainWindow):
             content = entry['summary']
         
         rtl = is_rtl(title)
-        html = "<html><head><style></style></head><body style=\"text-align: justify; direction: %s; font-size: 1.5em; font-family: 'Droid Arabic Naskh';\"><h1>%s</h1>%s</body></html>" % ('rtl' if rtl else 'ltr', title, content)
+        html = "<html><head><style></style></head><body style=\"direction: %s; font-size: 1.2em; font-family: 'Droid Arabic Naskh';\"><h1>%s</h1>%s</body></html>" % ('rtl' if rtl else 'ltr', title, content)
         self.webView.setHtml(html)
         
         con.execute("update entries set read = 1 where id = ?", (entry['id'],))
@@ -368,6 +368,7 @@ con = sqlite3.connect(db_path, detect_types=sqlite3.PARSE_DECLTYPES)
 con.row_factory = dict_factory
 con.execute('create table if not exists feeds (id integer PRIMARY KEY AUTOINCREMENT, title varchar, link varchar, [timestamp] timestamp);')
 con.execute('create table if not exists entries (id integer PRIMARY KEY AUTOINCREMENT, feed_id int, title varchar, summary varchar, content varchar, read bit default 0, link varchar, [timestamp] timestamp, FOREIGN KEY(feed_id) REFERENCES feeds(id));')
+con.commit()
 
 def main():
     app = QApplication(sys.argv)
