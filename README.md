@@ -37,7 +37,7 @@ Note: if you're using virtual environments, you should install pyqt5 in your vir
 
 ![Screenshot 1](https://bijanebrahimi.github.io/boogi/screenshots/screenshot_01.png)
 
-![Screenshot 2](https://bijanebrahimi.github.io/boogi/screenshots/screenshot_01.png)
+![Screenshot 2](https://bijanebrahimi.github.io/boogi/screenshots/screenshot_02.png)
 
 # To-Dos
 
