@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>220</width>
-    <height>54</height>
+    <width>265</width>
+    <height>60</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -28,20 +28,11 @@
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>6</number>
+     </property>
      <item>
-      <widget class="QLabel" name="countLabel">
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>countLabel</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="linkLabel">
+      <widget class="QLabel" name="dateLabel">
        <property name="layoutDirection">
         <enum>Qt::LeftToRight</enum>
        </property>
@@ -49,7 +40,20 @@
         <string notr="true">color: grey;</string>
        </property>
        <property name="text">
-        <string>linkLabel</string>
+        <string>dateLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="sourceLabel">
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: grey;</string>
+       </property>
+       <property name="text">
+        <string>sourceLabel</string>
        </property>
       </widget>
      </item>

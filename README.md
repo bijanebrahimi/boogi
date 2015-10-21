@@ -7,6 +7,12 @@ Boogi is a light-weight feed reader written using python and (Py)Qt5.
 `boogi` is not a name. it's more of a sound. i make `boogi` sound to make my niece laugh and this was the only name
 came to mind when i started this project.
 
+# Features
+
+* Simple and light-weighted
+* Full Article reading using Readability! (see screenshot no.2)
+* Fast search
+
 # Install
 
 Sorry, right now there's no descent way to install Boogi. i should find some time to create a setuptool script very 
@@ -20,9 +26,9 @@ but here's the manual instruction:
 but beware there's PyQt5 as package dependency which can not be installed from pip easily (AFAIK). you need to install 
 it as well from your system package manager.
 
-        # DEBIAN/UBUNTU flavors
+        # DEBIAN/UBUNTU based distros
         # apt-get install python-pyqt5
-        #
+        
         # ArchLinux
         # pacman -S python-pyqt5
 
@@ -31,7 +37,7 @@ Note: if you're using virtual environments, you should install pyqt5 in your vir
 # Run
 
         $ cd boogi
-        $ python main.py
+        $ python run.py
 
 # Screenshots
 
@@ -39,8 +45,16 @@ Note: if you're using virtual environments, you should install pyqt5 in your vir
 
 ![Screenshot 2](https://bijanebrahimi.github.io/boogi/screenshots/screenshot_02.png)
 
+![Screenshot 3](https://bijanebrahimi.github.io/boogi/screenshots/screenshot_03.png)
+
+
 # To-Dos
 
 * code clean-ups
-* add readability to fetch to full article content
 * and maybe some features to make us laugh ;)
+
+# ChangeLog
+
+* ver 0.2
+    * added `Full Article` reading in app using readability 
+
