@@ -55,6 +55,10 @@ Note: if you're using virtual environments, you should install pyqt5 in your vir
 
 # ChangeLog
 
+* ver 0.3
+    * added 'Read All' button
+    * fixed feed count label
+    * added somehow better update process
 * ver 0.2
     * added `Full Article` reading in app using readability 
 
