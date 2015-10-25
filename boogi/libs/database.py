@@ -148,7 +148,7 @@ def db_delete_feed(*, id, con=None):
     con.commit()
     return True
 
-def db_update_entries(*, set_content=None, set_read=None, keyword=None, feed_id=None, feed_ids=None, id=None, con=None):
+def db_update_entries(*, set_content=None, set_read=None, keyword=None, feed_id=None, feed_ids=None, id=None, ids=None, con=None):
     if not con:
         con = db_connect()
     
@@ -173,6 +173,10 @@ def db_update_entries(*, set_content=None, set_read=None, keyword=None, feed_id=
     if id:
         where_statement += 'entries.id = ? and '
         args.append(id)
+    
+    if ids:
+        where_statement += 'entries.id in (%s) and ' % (','.join('?'*len(ids)))
+        args.extend(ids)
     
     if feed_id:
         where_statement += 'entries.feed_id = ? and '

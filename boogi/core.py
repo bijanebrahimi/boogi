@@ -13,12 +13,12 @@ from gui.feed_dialog import FeedDialog
 from helpers.html import html
 from PyQt5.QtWidgets import QListWidgetItem
 from readability.readability import Document
-from threading import Thread
+from threading import Thread, Lock
 import requests
 from queue import Queue
 
-
 jobs_queue = Queue()
+jobs_lock = Lock()
 
 con = db_connect()
 feed_idx = {}
@@ -49,6 +49,30 @@ class BoogiWindow(MainWindow):
         self.entryListWidget.verticalScrollBar().valueChanged.connect(self.loadNextEntries)
         
         self.readabilityBtn.clicked.connect(self.readabilityBtnClicked)
+        self.markAllBtn.clicked.connect(self.markAllBtnClicked)
+        
+        style_sheet = """
+            QListWidget {
+                border: 0px;
+                margin-top: 10px;
+                show-decoration-selected: 1;
+            }
+            QListWidget::item::selected{
+                background: rgb(248, 248, 248);
+                border: 0px;
+            }
+            QListWidget::item::hover{
+                background: rgb(248, 248, 248);
+            }
+            QListWidget::item::selected:active{
+                background: rgb(248, 248, 248);
+                background: transparent;
+                border: 0px;
+                border-radius: 0px;
+
+            }
+        """
+        self.setStyleSheet(style_sheet)
     
     def reloadFeeds(self):
         global feed_idx
@@ -71,7 +95,17 @@ class BoogiWindow(MainWindow):
             list_item, feed_item = self.insertFeedItem(feed=feed)
             list_item.feed_id = feed_id
             feed_idx[feed_id] = (ref(list_item), ref(feed_item))
+        self.updateFeedLabel()
         
+    def updateFeedLabel(self):
+        global feed_idx
+        feed_count = len(feed_idx)
+        if feed_count:
+            self.feedLabel.setText("%s Feed%s Found" % (feed_count, 's' if feed_count > 1 else ''))
+        else:
+            self.feedLabel.setText("No Feed Found")
+        
+    
     def insertFeedItem(self, title=None, link=None, feed=None):
         if not feed:
             feed = {}
@@ -81,6 +115,7 @@ class BoogiWindow(MainWindow):
         
         feed_item = FeedItem(title=title, source=link)
         list_item = QListWidgetItem()
+        
 
         self.feedList.addItem(list_item)
         self.feedList.setItemWidget(list_item, feed_item)
@@ -145,8 +180,9 @@ class BoogiWindow(MainWindow):
         entry_id = entry['id']
         entry_item = EntryItem(title=entry['title'],
                                date=entry['timestamp'],
-                               source=entry['feed_title'])
-        list_item = QListWidgetItem()
+                               source=entry['feed_title'],
+                               read=entry['read'])
+        list_item = QListWidgetItem(self.entryListWidget)
         
         list_item.entry_id = entry_id
         entry_idx[entry_id] = (ref(list_item), ref(entry_item))
@@ -178,7 +214,7 @@ class BoogiWindow(MainWindow):
         self.webView.setHtml(html(title, content))
         # FIXME: set entry_item style to show it has been read
         db_update_entries(id=entry_id, set_read=True)
-        entry_idx[entry_id][1]().setAsRead()
+        entry_idx[entry_id][1]().setRead(True)
 
     def loadNextEntries(self, value):
         global entry_page
@@ -267,12 +303,12 @@ class BoogiWindow(MainWindow):
 
     def fetchEntries(self, feed_link, feed_id, latest=None):
         global jobs_queue
-        feed_dict = feed_parser(feed_link)
         try:
-            pass
+            # TODO: feed_parser needs a timeout
+            feed_dict = feed_parser(feed_link)
         except Exception as e:
             # FIXME: use logger
-            print('DEBUG', e)
+            pass
         else:
             for entry in feed_dict['entries']:
                 if not latest or latest < entry['published']:
@@ -282,8 +318,7 @@ class BoogiWindow(MainWindow):
                             content='',
                             timestamp=entry['published'],
                             feed_id=feed_id)
-        finally:
-            jobs_queue.put(feed_link)
+        jobs_queue.put(feed_link)
     
     def updateFeeds(self):
         global feed_idx
@@ -293,9 +328,7 @@ class BoogiWindow(MainWindow):
         total = len(feed_ids)
         cur = db_select_feeds(ids=feed_ids, con=con)
         
-        thread = Thread(target=self.updateProgressBar, args=())
-        thread.start()
-        
+        threads = []
         for feed in cur:
             feed_id = feed['id']
             feed_link = feed['link']
@@ -305,16 +338,15 @@ class BoogiWindow(MainWindow):
                 latest_entry = {}
             thread = Thread(target=self.fetchEntries, args=(feed_link, feed_id, latest_entry.get('timestamp')))
             thread.start()
-            
-
-    def updateProgressBar(self):
-        global feed_idx
-
-        jobs_total = len(feed_idx)
-        jobs_done = 0
+            threads.append(thread)
         
-        if not jobs_total:
-            return
+        thread = Thread(target=self.updateProgressBar, args=(threads, ))
+        thread.start()
+
+    def updateProgressBar(self, threads):
+        global jobs_queue
+        jobs_total = len(threads)
+        jobs_done = 0
         
         message = jobs_queue.get()
         while message:
@@ -322,10 +354,25 @@ class BoogiWindow(MainWindow):
             
             progress = int((jobs_done/jobs_total)*100)
             self.feedProgressBar.setValue(progress)
+            
+            # FIXME: won't work when threads timeout
             if jobs_done == jobs_total:
                 break
             message = jobs_queue.get()
         
         self.updateAllBtn.setEnabled(True)
         self.feedProgressBar.setValue(0)
+
+    def markAllBtnClicked(self):
+        global entry_idx
+        entry_keys = entry_idx.keys()
+        db_update_entries(ids=entry_keys, set_read=1)
+        if self.feedList.currentRow() == UNREAD_ITEMS:
+            self.reloadEntries()
+        else:
+            for entry_id, entry in entry_idx.items():
+                item_widget, entry_item = entry_idx[entry_id]
+                entry_item().setRead(True)
+        
+    
 
