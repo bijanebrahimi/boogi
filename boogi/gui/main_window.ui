@@ -6,128 +6,113 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>663</width>
-    <height>462</height>
+    <width>712</width>
+    <height>570</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_4">
+   <layout class="QHBoxLayout" name="horizontalLayout_5">
     <item>
      <widget class="QWidget" name="listView" native="true">
-      <layout class="QGridLayout" name="gridLayout_2">
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-       <property name="horizontalSpacing">
-        <number>6</number>
-       </property>
-       <item row="0" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,2">
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout">
          <item>
-          <layout class="QVBoxLayout" name="verticalLayout">
+          <widget class="QLineEdit" name="feedEdit">
+           <property name="placeholderText">
+            <string>Search</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="feedLabel">
+           <property name="text">
+            <string>No item found</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QListWidget" name="feedList"/>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
-            <widget class="QLineEdit" name="feedEdit">
-             <property name="placeholderText">
-              <string>Search</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="feedLabel">
+            <widget class="QPushButton" name="feedAddBtn">
              <property name="text">
-              <string>No item found</string>
+              <string>Add</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QListWidget" name="feedList"/>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout">
-             <item>
-              <widget class="QPushButton" name="feedAddBtn">
-               <property name="text">
-                <string>Add</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="feedDeleteBtn">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="text">
-                <string>Delete</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="feedEditBtn">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="text">
-                <string>Edit</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
-              <widget class="QPushButton" name="updateAllBtn">
-               <property name="text">
-                <string>Update All</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <widget class="QProgressBar" name="feedProgressBar">
-             <property name="autoFillBackground">
+            <widget class="QPushButton" name="feedDeleteBtn">
+             <property name="enabled">
               <bool>false</bool>
              </property>
-             <property name="value">
-              <number>0</number>
+             <property name="text">
+              <string>Delete</string>
              </property>
-             <property name="textVisible">
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="feedEditBtn">
+             <property name="enabled">
               <bool>false</bool>
              </property>
+             <property name="text">
+              <string>Edit</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
-             <property name="textDirection">
-              <enum>QProgressBar::TopToBottom</enum>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="updateAllBtn">
+             <property name="text">
+              <string>Update All</string>
              </property>
             </widget>
            </item>
           </layout>
          </item>
          <item>
-          <layout class="QVBoxLayout" name="verticalLayout_2">
+          <widget class="QProgressBar" name="feedProgressBar">
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
+           <property name="value">
+            <number>0</number>
+           </property>
+           <property name="textVisible">
+            <bool>false</bool>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="textDirection">
+            <enum>QProgressBar::TopToBottom</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
             <widget class="QLineEdit" name="entryEditWidget">
              <property name="placeholderText">
@@ -136,13 +121,22 @@
             </widget>
            </item>
            <item>
-            <widget class="QListWidget" name="entryListWidget"/>
+            <widget class="QPushButton" name="markAllBtn">
+             <property name="text">
+              <string>Mark Read All</string>
+             </property>
+            </widget>
            </item>
           </layout>
+         </item>
+         <item>
+          <widget class="QListWidget" name="entryListWidget"/>
          </item>
         </layout>
        </item>
       </layout>
+      <zorder></zorder>
+      <zorder></zorder>
      </widget>
     </item>
     <item>

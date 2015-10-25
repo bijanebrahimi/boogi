@@ -7,15 +7,20 @@ from helpers.date import pretty_date
 
 
 class EntryItem(QWidget):
-    def __init__(self, title, source=None, date=None):
+    def __init__(self, title, source=None, date=None, read=False):
         super(QWidget, self).__init__()
         loadUi('gui/entry_item.ui', self)
         self.setTitle(title)
         self.setSource(source)
         self.setDate(date)
+        self.setRead(read)
+        self.setProperty("isRead", '0');
 
     def setTitle(self, title):
-        self.titleLabel.setText(title)
+        if len(title)>80:
+            self.titleLabel.setText(u"%s …" % title[:80])
+        else:
+            self.titleLabel.setText(title)
     
     def setDate(self, date=None):
         if date:
@@ -32,8 +37,11 @@ class EntryItem(QWidget):
         else:
             self.sourceLabel.setHidden(True)
     
-    def setAsRead(self):
-        title = self.titleLabel.text()
-        # FIXME: implement the visual look
-        # self.titleLabel.setText("[%s]" % title)
-
+    def setRead(self, read):
+        # print(dir(self))
+        if read:
+            self.readLabel.setHidden(False)
+            self.readLabel.setText("READ")
+        else:
+            self.readLabel.setHidden(True)
+            
